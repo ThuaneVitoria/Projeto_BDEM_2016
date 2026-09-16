@@ -16,6 +16,8 @@
 # Tarefa 1. Leitura do banco de dados SIM_2016 com 1309774 linhas e 87 colunas com o nome de dados_sim
 # Verificar se a leitura foi feita corretamente e a estrutura dos dados
 
+dados_sim = read.csv2(file ="~/Área de Trabalho/Pasta Pública/PRATICA ESTATISTICA 1/Thuane Vitória/Projeto BDEM/Projeto_BDEM_2016/SIM_2016.csv")
+dados_sim
 
 # Ao terminar a Tarefa 1 commit com a mensagem "script BDEM - SIM - tarefa 1" e envie para o repositório Projeto_BDEM_2016
 
