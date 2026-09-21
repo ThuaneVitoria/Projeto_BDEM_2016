@@ -53,12 +53,27 @@ dados_sim_2 = dados_sim_1 |>
 
 
 # Ao terminar a Tarefa 3 commit com a mensagem "script BDEM - SIM - tarefas 1 a 3" e envie para o repositório Projeto_BDEM_2016
-getwd()
+
 
 # Tarefa 4. Verificar em dados_sim_2 a frequência das categorias das seguintes variáveis:
 # TIPOBITO, SEXO, RACACOR, ESC2010, TPMORTEOCO, CAUSABAS
+vet = c('TIPOBITO', 'SEXO', 'RACACOR', 'ESC2010', 'TPMORTEOCO', 'CAUSABAS')
+
+summary(dados_sim_2[vet])
+
+dados_sim_2$TIPOBITO
+dados_sim_2$SEXO
+dados_sim_2$RACACOR
+dados_sim_2$ESC2010
+dados_sim_2$TPMORTEOCO
+dados_sim_2$CAUSABAS
+
 # Avalie também os valores das variável IDADE (não estranhe mas idade é composta de um dígito inicial que indica a unidade de medida)
 # Unidades de medida a serem consideradas em IDADE: 0: minutos, 1: horas, 2: dias, 3: meses, 4: anos, 5: idade maior que 100 anos
+
+dados_sim_2$IDADE
+summary(dados_sim_2$IDADE)
+
 # Atenção: a unidade de medida de IDADE no DICIONÀRIO do SIM está errada
 # O propósito das avaliações acima é verificar se as categorias estão de acordo com o dicionário do SIM ou se aparecem categorias estranhas
 
