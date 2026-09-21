@@ -40,6 +40,10 @@ dados_sim_1
 # 25: PB, 26: PE, 27: AL, 28: SE, 29: BA, 31: MG, 32: ES, 33: RJ, 35: SP, 41: PR, 42: SC, 43: RS
 # 50: MS, 51: MT, 52: GO, 53: DF
 
+dados_sim_2 = dados_sim_1 |>
+  filter(CODMUNRES %/% 10000 == 50)
+
+
 # observar abaixo o número de óbitos por UF de residência para certificar-se que seu banco de dados está correto
 # 11:8344      12:3763     13:16799    14:2157      15:38557     16:2995     17:7490
 # 21:34362     22:19187    23:54276    24:21922     25:28041     26:66928    27:20769    28:13516     29:88094
@@ -49,7 +53,7 @@ dados_sim_1
 
 
 # Ao terminar a Tarefa 3 commit com a mensagem "script BDEM - SIM - tarefas 1 a 3" e envie para o repositório Projeto_BDEM_2016
-
+getwd()
 
 # Tarefa 4. Verificar em dados_sim_2 a frequência das categorias das seguintes variáveis:
 # TIPOBITO, SEXO, RACACOR, ESC2010, TPMORTEOCO, CAUSABAS
