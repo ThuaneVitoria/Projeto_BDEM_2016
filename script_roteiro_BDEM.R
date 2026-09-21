@@ -84,8 +84,17 @@ summary(dados_sim_2$IDADE)
 # Tarefa 5. Atribuir para cada variável de dados_sim_2 como sendo NA a categoria de "Não informado ou Ignorado", 
 # geralmente com código 9
 # Verifique o dicionário do SIM para identificar qual o código das categorias de cada variável
-# Em variáveis quantitativas como IDADE verificar se existem valores como 9999 para NA
+library(dplyr)
+    
+summary(dados_sim_2)
+dados_sim_2 = dados_sim_2 |>
+  mutate(across(where(is.numeric) & -CONTADOR, ~ na_if(., 9)),
+         across(where(is.character), ~ na_if(., '9')))
 
+
+# Em variáveis quantitativas como IDADE verificar se existem valores como 9999 para NA
+dados_sim_2 = dados_sim_2 |>
+  mutate(IDADE = na_if(IDADE,999))
 
 # Ao terminar a Tarefa 5 commit com a mensagem "script BDEM - SIM - tarefas 1 a 5" e envie para o repositório Projeto_BDEM_2016
 
