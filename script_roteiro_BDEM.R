@@ -16,7 +16,7 @@
 # Tarefa 1. Leitura do banco de dados SIM_2016 com 1309774 linhas e 87 colunas com o nome de dados_sim
 # Verificar se a leitura foi feita corretamente e a estrutura dos dados
 
-dados_sim = read.csv2(file ="~/Área de Trabalho/Pasta Pública/PRATICA ESTATISTICA 1/Thuane Vitória/Projeto BDEM/Projeto_BDEM_2016/SIM_2016.csv")
+dados_sim = read.csv2(file ="SIM_2016.csv")
 dados_sim
 
 # Ao terminar a Tarefa 1 commit com a mensagem "script BDEM - SIM - tarefa 1" e envie para o repositório Projeto_BDEM_2016
@@ -84,7 +84,6 @@ summary(dados_sim_2$IDADE)
 # Tarefa 5. Atribuir para cada variável de dados_sim_2 como sendo NA a categoria de "Não informado ou Ignorado", 
 # geralmente com código 9
 # Verifique o dicionário do SIM para identificar qual o código das categorias de cada variável
-library(dplyr)
     
 summary(dados_sim_2)
 dados_sim_2 = dados_sim_2 |>
@@ -122,12 +121,107 @@ summary(dados_sim_2)
 
 # Tarefa 7. Criar um banco de dados, de nome SIM_UF.csv (Exemplo: SIM_RJ.csv), contendo as variáveis listadas no arquivo “Variáveis - Projeto - Tarefa 7 - SIM.pdf”
 # Atenção: a ordem das variáveis do arquivo deve ser respeitada
+library(dplyr)
 
+SIM_MS = dados_sim_2 |>
+  group_by(CODMUNRES) |>
+  summarise(
+    #	Identificadores do banco de dados
+    ANO = 2016,
+    NIVEL = "MUNICIPIO",
+    
+    # Informações gerais
+    TO = n(),
+    
+    TORC = sum(complete.cases(dados_sim[dados_sim$CODMUNRES == first(CODMUNRES), ])),
+    
+    TORCR = sum(complete.cases(dados_sim_1[dados_sim_1$CODMUNRES == first(CODMUNRES), ])),
+    
+    TO_NN = sum(substr(CAUSABAS, 1, 1) %in% c("V", "W", "X", "Y"), na.rm = TRUE),
+    
+    TO_N = sum(!substr(CAUSABAS, 1, 1) %in% c("V", "W", "X", "Y"), na.rm = TRUE),
+    
+    TO_CB_I = sum(substr(CAUSABAS, 1, 1) %in% c("A", "B"), na.rm = TRUE),
+    
+    TO_CB_N = sum( substr(CAUSABAS, 1, 1) == "C" | 
+                     (substr(CAUSABAS, 1, 3) >= "D00" & substr(CAUSABAS, 1, 3) <= "D89" & substr(CAUSABAS, 1, 3) != "D49"), na.rm = TRUE),
+    
+    TO_CB_C = sum( substr(CAUSABAS, 1, 3) >= "I00" & substr(CAUSABAS, 1, 3) <= "I99",na.rm = TRUE),
+    
+    TO_CB_R = sum( substr(CAUSABAS, 1, 3) >= "J00" & substr(CAUSABAS, 1, 3) <= "J99",na.rm = TRUE),
+    
+    TO_CB_O = sum(!substr(CAUSABAS, 1, 1) %in% c("V", "W", "X", "Y") &  !substr(CAUSABAS, 1, 1) %in% c("A", "B", "C", "I", "J") & !(substr(CAUSABAS, 1, 1) == "D" 
+                                                                                                                                    & as.numeric(substr(CAUSABAS, 2, 3)) <= 48) & !(substr(CAUSABAS, 1, 1) == "D" & as.numeric(substr(CAUSABAS, 2, 3)) >= 50), na.rm = TRUE),
+    
+    TO_M = sum(SEXO == 'Masculino'),
+    TO_F = sum(SEXO == 'Feminino'),
+    
+    TO_F_IF = sum( SEXO =='Feminino' & IDADE >= 415 & IDADE <= 449, na.rm = TRUE),
+    
+    # Informações fetais e neonatais
+    
+    TO_FT = sum(TIPOBITO == "Fetal"),
+    
+    TO_NT = sum(TIPOBITO == "Não fetal" & IDADE >= 200 & IDADE <= 227, na.rm = TRUE),
+    
+    TO_NT_P = sum(TIPOBITO == "Não fetal" & IDADE >= 200 & IDADE <= 206, na.rm = TRUE),
+    
+    TO_NT_T = sum(TIPOBITO == "Não fetal" & IDADE >= 207 & IDADE <= 227, na.rm = TRUE),
+    
+    TO_PNT = sum(TIPOBITO == 'Não fetal' & IDADE >=  288 & IDADE <= 331, na.rm = TRUE),
+    
+    TONT_B = sum(TIPOBITO == 'Não fetal'& IDADE >= 200 & IDADE<=227 &RACACOR == "Branca", na.rm = TRUE),
+    
+    TONT_PT = sum(TIPOBITO == 'Não fetal'& IDADE >= 200 & IDADE<=227 & RACACOR == "Preta", na.rm = TRUE),
+    
+    TONT_A = sum(TIPOBITO == 'Não fetal'& IDADE >= 200 & IDADE<=227 & RACACOR == "Amarela", na.rm = TRUE),
+    
+    TONT_PD = sum(TIPOBITO == 'Não fetal'& IDADE >= 200 & IDADE<=227 & RACACOR == "Parda", na.rm = TRUE),
+    
+    TONT_I = sum(TIPOBITO == 'Não fetal'& IDADE >= 200 & IDADE<=227 & RACACOR == "Indígena", na.rm = TRUE),
+    
+    #Informações maternas
+    
+    TO_MT = sum(TPMORTEOCO != "Não ocorreu nestes períodos", na.rm = TRUE),
+    
+    TO_MT_DG = sum(TPMORTEOCO == "Na gravidez",na.rm = TRUE),
+    
+    TO_MT_PT = sum(TPMORTEOCO == 'No parto',na.rm = TRUE),
+    
+    TO_MT_AB = sum(TPMORTEOCO == 'No abortamento',na.rm = TRUE),
+    
+    TO_MT_42 = sum (TPMORTEOCO == 'Até 42 dias após o término do parto', na.rm = TRUE),
+    
+    TO_MT_43 = sum(TPMORTEOCO == 'De 43 dias a 1 ano após o término da gestação',na.rm = TRUE),
+    
+    TO_MT_P =  sum(TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto", na.rm = TRUE),
+    
+    TO_MT_P_I = sum((TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto") & IDADE >= 415 & IDADE <= 449, na.rm = TRUE),
+    
+    TO_MT_P_ES = sum((TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto") & ESC2010 == "Sem escolaridade", na.rm = TRUE),
+    
+    TO_MT_P_EFI = sum((TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto") & ESC2010 == "Fundamental I", na.rm = TRUE),
+    
+    TO_MT_P_EFII = sum((TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto") & ESC2010 == "Fundamental II", na.rm = TRUE),
+    
+    TO_MT_P_EM = sum((TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto") & ESC2010 == "Médio", na.rm = TRUE),
+    
+    TO_MT_P_ESI = sum((TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto") & ESC2010 == "Superior incompleto", na.rm = TRUE),
+    
+    TO_MT_P_ESC = sum((TPMORTEOCO == "Na gravidez" | TPMORTEOCO == "No parto" | TPMORTEOCO == "No abortamento" | TPMORTEOCO == "Até 42 dias após o término do parto") & ESC2010 == "Superior completo", na.rm = TRUE)
+    
+  )|>
+  select(ANO, NIVEL, CODMUNRES, TO, TORC, TORCR, TO_NN,TO_N, TO_CB_I,TO_CB_N, TO_CB_C, TO_CB_R,TO_CB_O, TO_M, TO_F, TO_F_IF, TO_FT, TO_NT,
+         TO_NT_P, TO_NT_T, TO_PNT,TONT_B,TONT_PT,TONT_A,TONT_PD,TONT_I, TO_MT, TO_MT_DG,TO_MT_PT,TO_MT_AB,TO_MT_42,TO_MT_43,TO_MT_P,TO_MT_P_I,
+         TO_MT_P_ES,TO_MT_P_EFI,TO_MT_P_EFII,TO_MT_P_EM,TO_MT_P_ESI, TO_MT_P_ESC)
+SIM_MS
+glimpse(SIM_MS)
 
 # Ao terminar a Tarefa 7 commit com a mensagem "script BDEM - SIM - tarefas 1 a 7" e envie para o repositório Projeto_BDEM_2016
 
 
 # Tarefa 8. Exportar o banco de dados com o nome SIM_UF.csv (Exemplo: SIM_RJ.csv)
+write.csv2(SIM_MS, 'SIM_MS.csv')
 
 # Ao terminar a Tarefa 8 fazer um commit com o comentário "dados SIM_UF 2016 e script - SIM - tarefas 1 a 8"  e envie para o repositório Projeto_BDEM_2016
 
