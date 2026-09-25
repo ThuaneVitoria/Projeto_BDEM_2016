@@ -105,7 +105,7 @@ dados_sim_2 = dados_sim_2 |>
 # ATENçÃO: 1. Na hora de escrever os labels, somente a PRIMEIRA LETRA da legenda é maiúscula. Exemplo para SEXO: Feminino e Masculino
 #          2. Nesta Tarefa 6 não crie novas variáveis dentro do banco de dados
 
-dados_sim_2$TIPOBITO = factor(dados_sim_2$TIPOBITO, levels = c(1,2), labels = c('Fetal','Não Fetal'))
+dados_sim_2$TIPOBITO = factor(dados_sim_2$TIPOBITO, levels = c(1,2), labels = c('Fetal','Não fetal'))
 dados_sim_2$SEXO = factor(dados_sim_2$SEXO, levels = c(1,2), labels = c('Masculino', 'Feminino'))
 dados_sim_2$RACACOR = factor(dados_sim_2$RACACOR, levels = c(1,2,3,4,5), labels = c('Branca', 'Preta','Amarela','Parda','Indígena'))
 dados_sim_2$ESC2010 = factor(dados_sim_2$ESC2010, levels = c(0, 1,2,3,4,5), labels = c('Sem escolaridade', "Fundamental I", 'Fundamental II', 'Médio', 'Superior incompleto','Superior completo'))
@@ -114,7 +114,7 @@ dados_sim_2$TPMORTEOCO = factor(dados_sim_2$TPMORTEOCO, levels = c(1,2,3,4,5,8),
                                            'No parto', 'No abortamento',
                                            'Até 42 dias após o término do parto',
                                            'De 43 dias a 1 ano após o término da gestação',
-                                           'Não ocorreu nesses períodos'))
+                                           'Não ocorreu nestes períodos'))
 summary(dados_sim_2)
 
 # Ao terminar a Tarefa 6 commit com a mensagem "script BDEM - SIM - tarefas 1 a 6" e envie para o repositório Projeto_BDEM_2016
