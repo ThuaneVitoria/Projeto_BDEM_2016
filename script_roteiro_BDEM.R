@@ -344,6 +344,27 @@ dados_sinasc_2 = dados_sinasc_2 |>
 # ATENçÃO: 1. Na hora de escrever os labels, somente a primeira letra da legenda é maiúscula. Exemplo para SEXO: Feminino e Masculino
 #          2. Nesta Tarefa 6 não crie novas variáveis dentro do banco de dados
 
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    LOCNASC = factor(LOCNASC,levels = c(1,2,3,4,5), labels = c('Hospital','Outros estabelecimentos de saúde','Domicílio','Outros','Aldeia indígena')),
+    
+    ESTCIVMAE = factor(ESTCIVMAE, levels = c(1:5), labels = c('Solteira','Casada','Viúva','Separada judicialmente/divorciada','União estável')),
+    
+    GESTACAO = factor(GESTACAO, levels= c(1:6), labels = c('Menos de 22 semanas', '22 a 27 semanas','28 a 31 semanas','32 a 36 semanas','37 a 41 semanas','42 semanas e mais')),
+    GRAVIDEZ = factor(GRAVIDEZ, levels = c(1:3), labels = c('Única', 'Dupla','Tripla ou mais')),
+    PARTO = factor(PARTO, levels = c(1,2), labels = c('Vaginal','Cesário')),
+    SEXO = factor(SEXO,levels = c(1,2), labels = c('Masculino','Feminino')),
+    RACACOR = factor(RACACOR, levels = c(1:5), labels = c('Branca','Preta','Amarela','Parda','Indígena')),
+    IDANOMAL =  factor(IDANOMAL, levels = c(1,2), labels = c('Sim', 'Não')),
+    ESCMAE2010 = factor(ESCMAE2010, levels = c(0:5), labels = c('Sem escolaridade','Fundamental I','Fundamental II','Médio','Superior incompleto','Superior completo')),
+    RACACORMAE = factor(RACACORMAE, levels = c(1:5), labels = c('Branca','Preta','Amarela','Parda','Indígena')),
+    TPAPRESENT = factor(TPAPRESENT, levels = c(1:3), labels = c('Cefálico','Pélvica ou podálica','Transversa')),
+    # TPROBSON = factor(levels = c(1:10, levels = c()))
+    PARIDADE = factor(PARIDADE, levels = c(0,1), labels = c('Nulípara','Multípara')),
+    KOTELCHUCK = factor(KOTELCHUCK, levels = c(1,2,3,4,5),
+                        labels = c("Não realizou pré-natal", "Inadequado", "Intermediário", "Adequado", "Mais que adequado"))
+  )
+
 
 # Ao terminar a Tarefa 6 commit com a mensagem "script BDEM - SINASC - tarefas 1 a 6" e envie para o repositório Projeto_BDEM_2016
 
