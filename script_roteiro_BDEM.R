@@ -371,13 +371,75 @@ dados_sinasc_2 = dados_sinasc_2 |>
 
 # Tarefa 7. Categorizar as variáveis IDADEMAE, PESO e APGAR5 e criar variáveis referentes ao deslocamento materno (peregrinação) e estado civil
 # nova variável: dados_sinasc_2$F_PESO com PESO: < 2500: Baixo peso, >=2500 e < 4000: Peso normal, >= 4000: Macrossomia
+
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    F_PESO = factor(
+      case_when(
+        PESO < 2500 ~ "Baixo peso",
+        PESO >= 2500 & PESO < 4000 ~ "Peso normal",
+        PESO >= 4000 ~ "Macrossomia"
+      ),
+      levels = c("Baixo peso", "Peso normal", "Macrossomia"))
+  )
+
+
 # nova variável dados_sinasc_2$F_IDADE com IDADEMAE: <15, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50+
+
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    F_IDADE = cut(
+      IDADEMAE,
+      breaks = c(0, 14, 19, 24, 29, 34, 39, 44, 49, 100),
+      labels = c("<15", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50+"),
+    )
+  )
+
 # nova variável dados_sinasc_2$F_APGAR5 com APGAR5: < 7: Baixo, >= 7: Normal
+
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    F_APGAR5 = factor(
+      case_when(
+        APGAR5 < 7 ~ "Baixo",
+        APGAR5 >= 7 ~ "Normal"
+      ),
+      levels = c("Baixo", "Normal")
+    )
+  )
+
+
 # Atenção para casos de NA em IDADEMAE, PESO e APGAR5
 # nova variável: dados_sinasc_2$PEREG: Não: CODMUNNASC igual a CODMUNRES, Sim: CODMUNNASC diferente de CODMUNRES
-# nova variável: dados_sinasc_2$ESTCIV: Sem companheiro: ESTCIVMAE 1, 3 ou 4, Com companheiro: ESTCIVMAE 2 ou 5
-# Ao categorizar as variáveis, garantir que sejam transformadas em tipo fator
 
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    PEREG = factor(
+      case_when(
+        CODMUNNASC == CODMUNRES ~ "Não",
+        CODMUNNASC != CODMUNRES ~ "Sim"
+      ),
+      levels = c("Não", "Sim")
+    )
+  )
+
+
+# nova variável: dados_sinasc_2$ESTCIV: Sem companheiro: ESTCIVMAE 1, 3 ou 4, Com companheiro: ESTCIVMAE 2 ou 5
+
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    ESTCIV = factor(
+      case_when(
+        ESTCIVMAE %in% c('Solteira', 'Viúva', 'Separada judicialmente/divorciada') ~ "Sem companheiro",
+        ESTCIVMAE %in% c('Casada', 'União estável') ~ "Com companheiro"
+      ),
+      levels = c("Sem companheiro", "Com companheiro")
+    )
+  )
+
+
+# Ao categorizar as variáveis, garantir que sejam transformadas em tipo fator
+summary(dados_sinasc_2)
 
 # Ao terminar a Tarefa 7 commit com a mensagem "script BDEM - SINASC - tarefas 1 a 7" e envie para o repositório Projeto_BDEM_2016
 
