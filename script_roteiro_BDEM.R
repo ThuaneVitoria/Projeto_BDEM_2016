@@ -479,6 +479,144 @@ dados_sinasc_2
 # Tarefa 9. Criar um banco de dados, de nome SINASC_UF.csv (Exemplo: SINASC_RJ.csv), contendo as variáveis listadas no arquivo “Variáveis - Projeto - Tarefa 9 - SINASC.pdf”
 # Atenção: a ordem das variáveis do arquivo deve ser respeitada
 
+library(dplyr)
+SINASC_MS = dados_sinasc_2 |>
+  group_by(CODMUNRES)|>
+  summarise( 
+    
+    # Descrição
+    ANO = 2016,
+    NIVEL = 'MUNICIPIO',
+    #CODMUNRES = dados_sinasc_2$CODMUNRES,
+    
+    # Informações sobre os nascimentos
+    TN = n(),
+    TNRC = sum(complete.cases(dados_sinasc[dados_sinasc$CODMUNRES == first(CODMUNRES), ])),
+    TNRCR = sum(complete.cases(dados_sinasc_1[dados_sinasc_1$CODMUNRES == first(CODMUNRES), ])),
+    
+    # Informações sobre as gestantes
+    TGI_15 = sum(IDADEMAE < 15, na.rm = TRUE), 
+    TGI_15_19 = sum( IDADEMAE >= 15 & IDADEMAE<=19, na.rm = TRUE),
+    TGI_20_24 = sum( IDADEMAE >= 20 & IDADEMAE <= 24, na.rm = TRUE),
+    TGI_25_29 = sum( IDADEMAE >= 25 & IDADEMAE <= 29, na.rm = TRUE),
+    TGI_30_34 = sum( IDADEMAE >= 30 & IDADEMAE <= 34, na.rm = TRUE),
+    TGI_35_39 = sum( IDADEMAE >= 35 & IDADEMAE <= 39, na.rm = TRUE),
+    TGI_40_44 = sum( IDADEMAE >= 40 & IDADEMAE <= 44, na.rm = TRUE),
+    TGI_45_49 = sum( IDADEMAE >= 45 & IDADEMAE <= 49, na.rm = TRUE),
+    TGI_50 = sum( IDADEMAE >= 50, na.rm = TRUE),
+    TGIF = sum(IDADEMAE >= 15 & IDADEMAE <= 49, na.rm = TRUE),
+    IM_P25 = quantile(IDADEMAE, probs = 0.25, na.rm = TRUE),
+    IM_P50 = quantile(IDADEMAE, probs = 0.5, na.rm = TRUE),
+    IM_P75 = quantile(IDADEMAE, probs = 0.75, na.rm = TRUE),
+    IM_MD = mean(IDADEMAE, na.rm = TRUE),
+    IM_DP = sd (IDADEMAE, na.rm = TRUE),
+    EM_S = sum(ESCMAE2010 == 'Sem escolaridade', na.rm =TRUE),
+    EM_FI = sum(ESCMAE2010 == "Fundamental I", na.rm = TRUE),
+    EM_FII = sum(ESCMAE2010 == "Fundamental II", na.rm = TRUE),
+    EM_M = sum(ESCMAE2010 == "Médio", na.rm = TRUE),
+    EM_SI = sum(ESCMAE2010 == "Superior incompleto", na.rm = TRUE),
+    EM_SC = sum(ESCMAE2010 == "Superior completo", na.rm = TRUE),
+    TGRC_B = sum(RACACORMAE == 'Branca', na.rm = TRUE),
+    TGRC_PT = sum(RACACORMAE == 'Preta', na.rm = TRUE),
+    TGRC_A = sum(RACACORMAE == 'Amarela', na.rm = TRUE),
+    TGRC_PD = sum(RACACORMAE == 'Parda', na.rm = TRUE),
+    TGRC_I = sum(RACACORMAE == 'Indígena', na.rm = TRUE),
+    TGSC = sum(ESTCIV == 'Sem companheiro', na.rm = TRUE),
+    TGCC = sum (ESTCIV == 'Com companheiro', na.rm = TRUE),
+    TGPRI = sum(PARIDADE == 'Nulípara', na.rm = TRUE),
+    TGNPRI = sum(PARIDADE == 'Multípara', na.rm = TRUE),
+    
+    # Informações sobre as gestações
+    TGU = sum(GRAVIDEZ == 'Única', na.rm = TRUE),
+    TGG = sum(GRAVIDEZ != 'Única', na.rm = TRUE),
+    TGD_22 = sum(SEMAGESTAC < 22, na.rm = TRUE),
+    TGD_22_27 = sum(SEMAGESTAC >= 22 & SEMAGESTAC <= 27, na.rm = TRUE),
+    TGD_28_31 = sum(SEMAGESTAC >= 28 & SEMAGESTAC <= 31, na.rm = TRUE),
+    TGD_32_36 = sum(SEMAGESTAC >= 32 & SEMAGESTAC <= 36, na.rm = TRUE),
+    TGD_37_41 = sum(SEMAGESTAC >= 37 & SEMAGESTAC <= 41, na.rm = TRUE),
+    TGD_42 = sum(SEMAGESTAC >= 42, na.rm = TRUE),
+    TGD_PRT = sum(GESTACAO == '32 a 36 semanas' | GESTACAO == '28 a 31 semanas' | GESTACAO == '22 a 27 semanas' | GESTACAO == 'Menos de 22 semanas', na.rm = TRUE),
+    TGD_AT = sum(GESTACAO == '37 a 41 semanas', na.rm = TRUE),
+    TGD_PST = sum(GESTACAO == '42 semanas e mais', na.rm = TRUE),
+    DG_P25 = quantile(SEMAGESTAC, probs = 0.25, na.rm = TRUE),
+    DG_P50 = quantile(SEMAGESTAC, probs = 0.5, na.rm = TRUE),
+    DG_P75 = quantile(SEMAGESTAC, probs = 0.75, na.rm = TRUE),
+    DG_MD = mean(SEMAGESTAC, na.rm = TRUE),
+    DG_DP = sd(SEMAGESTAC, na.rm = TRUE),
+    TKC_NR = sum(KOTELCHUCK == 'Não realizou pré-natal', na.rm = TRUE),
+    TKC_ID = sum(KOTELCHUCK == 'Inadequado', na.rm = TRUE),
+    TKC_IT = sum(KOTELCHUCK == "Intermediário", na.rm = TRUE),
+    TKC_AD = sum(KOTELCHUCK == "Adequado" , na.rm = TRUE),
+    TKC_MAD = sum(KOTELCHUCK == "Mais que adequado",na.rm = TRUE),
+    
+    # Informações sobre o parto
+    TGPRG_S = sum(PEREG == 'Sim', na.rm = TRUE),
+    TGPRG_N = sum(PEREG == 'Não', na.rm = TRUE),
+    TPV = sum(PARTO == 'Vaginal', na.rm = TRUE),
+    TPC = sum(PARTO == 'Cesário', na.rm = TRUE),
+    TRAP_C = sum(TPAPRESENT == 'Cefálico', na.rm = TRUE),
+    TRAP_P = sum(TPAPRESENT == 'Pélvica ou podálica', na.rm = TRUE),
+    TRAP_T = sum(TPAPRESENT == 'Transversa', na.rm = TRUE),
+    TGROB_1 = sum(TPROBSON == 1, na.rm = TRUE),
+    TGROB_2 = sum(TPROBSON == 2, na.rm = TRUE), 
+    TGROB_3 = sum(TPROBSON == 3,na.rm = TRUE),
+    TGROB_4 = sum(TPROBSON == 4, na.rm = TRUE),
+    TGROB_5 = sum(TPROBSON == 5, na.rm = TRUE),
+    TGROB_6 = sum(TPROBSON == 6, na.rm = TRUE),
+    TGROB_7 = sum(TPROBSON == 7, na.rm = TRUE),
+    TGROB_8 = sum(TPROBSON == 8, na.rm = TRUE),
+    TGROB_9 = sum(TPROBSON == 9, na.rm = TRUE),
+    TGROB_10 = sum(TPROBSON == 10, na.rm = TRUE),
+    TNLOC_H = sum(LOCNASC == 'Hospital', na.rm = TRUE),
+    TNLOC_ES = sum(LOCNASC == 'Outros estabelecimentos de saúde',na.rm = TRUE),
+    TNLOC_D = sum(LOCNASC == 'Domicílio', na.rm = TRUE),
+    TNLOC_O = sum(LOCNASC == 'Outros', na.rm = TRUE),
+    TNLOC_AI = sum(LOCNASC == 'Aldeia indígena', na.rm = TRUE),
+    
+    # Informações sobre os recém-nascidos
+    TRS_M = sum(SEXO == 'Masculino', na.rm = TRUE),
+    TRS_F = sum(SEXO == 'Feminino', na.rm = TRUE),
+    TRRC_B = sum(RACACOR == 'Branca', na.rm = TRUE),
+    TRRC_PT = sum(RACACOR == 'Preta', na.rm = TRUE),
+    TRRC_A = sum(RACACOR == 'Amarela', na.rm = TRUE),
+    TRRC_PD = sum(RACACOR == 'Parda', na.rm = TRUE),
+    TRRC_I = sum(RACACOR == 'Indígena', na.rm = TRUE),
+    TRP_BP = sum(PESO < 2500, na.rm = TRUE),
+    TRP_N = sum(PESO >= 2500 & PESO <4000, na.rm = TRUE),
+    TRP_M = sum(PESO >= 4000, na.rm = TRUE),
+    PESO_P25 = quantile(PESO, probs = 0.25, na.rm = TRUE),
+    PESO_P50 = quantile(PESO, probs = 0.50, na.rm = TRUE),
+    PESO_P75 = quantile(PESO, probs = 0.75, na.rm = TRUE),
+    PESO_MD = mean(PESO, na.rm = TRUE),
+    PESO_DP = sd(PESO, na.rm = TRUE),
+    TRPIG_P = sum(GRAVIDEZ == 'Única' & F_PIG == 'PIG', na.rm = TRUE),
+    TRPIG_A =  sum(GRAVIDEZ == 'Única' & F_PIG == 'AIG', na.rm = TRUE),
+    TRPIG_G =  sum(GRAVIDEZ == 'Única' & F_PIG == 'GIG', na.rm = TRUE),
+    TRAPG5_B = sum(APGAR5 < 7, na.rm = TRUE),
+    TRAPG5_N = sum(APGAR5 >= 7, na.rm = TRUE),
+    APG5_MD = mean(APGAR5, na.rm = TRUE),
+    APG5_DP = sd(APGAR5, na.rm = TRUE),
+    TRAC = sum(IDANOMAL == 'Sim', na.rm = TRUE),
+    TRSAC = sum(IDANOMAL == 'Não', na.rm = TRUE)
+  )|>
+  select(
+    ANO, NIVEL, CODMUNRES, TN, TNRC, TNRCR, TGI_15, TGI_15_19, TGI_20_24, 
+    TGI_25_29, TGI_30_34, TGI_35_39, TGI_40_44, TGI_45_49, TGI_50, TGIF, 
+    IM_P25, IM_P50, IM_P75, IM_MD, IM_DP, EM_S, EM_FI, EM_FII, EM_M, EM_SI, 
+    EM_SC, TGRC_B, TGRC_PT, TGRC_A, TGRC_PD, TGRC_I, TGSC, TGCC, TGPRI, 
+    TGNPRI, TGU, TGG, TGD_22, TGD_22_27, TGD_28_31, TGD_32_36, TGD_37_41, 
+    TGD_42, TGD_PRT, TGD_AT, TGD_PST, DG_P25, DG_P50, DG_P75, DG_MD, DG_DP, 
+    TKC_NR, TKC_ID, TKC_IT, TKC_AD, TKC_MAD, TGPRG_S, TGPRG_N, TPV, TPC, 
+    TRAP_C, TRAP_P, TRAP_T, TGROB_1, TGROB_2, TGROB_3, TGROB_4, TGROB_5, 
+    TGROB_6, TGROB_7, TGROB_8, TGROB_9, TGROB_10, TNLOC_H, TNLOC_ES, 
+    TNLOC_D, TNLOC_O, TNLOC_AI, TRS_M, TRS_F, TRRC_B, TRRC_PT, TRRC_A, 
+    TRRC_PD, TRRC_I, TRP_BP, TRP_N, TRP_M, PESO_P25, PESO_P50, PESO_P75, 
+    PESO_MD, PESO_DP, TRPIG_P, TRPIG_A, TRPIG_G, TRAPG5_B, TRAPG5_N, 
+    APG5_MD, APG5_DP, TRAC, TRSAC
+  )
+
+glimpse(SINASC_MS)
+
 
 # Ao terminar a Tarefa 9 commit com a mensagem "script BDEM - SINASC - tarefas 1 a 9" e envie para o repositório Projeto_BDEM_2016
 
