@@ -271,6 +271,9 @@ glimpse(dados_sinasc_1)
 # 25: PB, 26: PE, 27: AL, 28: SE, 29: BA, 31: MG, 32: ES, 33: RJ, 35: SP, 41: PR, 42: SC, 43: RS
 # 50: MS, 51: MT, 52: GO, 53: DF 
 
+dados_sinasc_2 = dados_sinasc_1 |>
+  filter(CODMUNRES %/% 10000 == 50)
+
 # observar abaixo o número de nascimentos por UF de residência para certificar-se que seu banco de dados está correto
 # 11: 26602     12: 15773     13: 76703     14: 11376     15: 137681    16: 15521      17: 23870
 # 21: 110493    22: 46986     23: 126246    24: 45366     25: 56083     26: 130733     27: 48164     28: 32218     29: 199830
@@ -278,6 +281,8 @@ glimpse(dados_sinasc_1)
 # 41: 155066    42: 95313     43: 141411
 # 50: 42432     51: 53531     52: 95563     53: 43340 
 
+dim(dados_sinasc_2)
+glimpse(dados_sinasc_2)
 
 # Ao terminar a Tarefa 3 commit com a mensagem "script BDEM - SINASC - tarefas 1 a 3" e envie para o repositório Projeto_BDEM_2016
 
