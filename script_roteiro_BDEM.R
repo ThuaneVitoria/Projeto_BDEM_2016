@@ -446,10 +446,32 @@ summary(dados_sinasc_2)
 
 # Tarefa 8. Agregar ao banco de dados_sinasc_2 as informações PESO_P10 e PESO_P90 a partir de Tabela_PIG_Brasil.csv
 # a Tabela PIG informa P10 e P90 dos pesos, de acordo com a idade gestacional
+
+tabela_pig_brasil = read.csv2('Tabela_PIG_Brasil.csv')
+
+dados_sinasc_2 = dados_sinasc_2 |>
+  left_join(
+    tabela_pig_brasil, 
+    by = c("SEMAGESTAC", "SEXO")
+  )
+
+
 # Criar nova variável referente ao peso, de acordo com a idade gestacional, conforme indicado abaixo
 # nova variável apenas para casos de GRAVIDEZ Única: dados_sinasc_2$F_PIG: PIG: PESO < PESO_P10, AIG: PESO_P10 <= PESO <= PESO_P90, GIG: PESO > PESO_P90
 # Atenção para casos de NA em SEMAGESTAC, PESO ou SEXO. Lembre-se também que em dados_sinasc_2 SEXO está como fator com as categorias Feminino e Masculino.
 
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    F_PIG = factor(
+      case_when(
+        (GRAVIDEZ == "Única") & PESO < PESO_P10 ~ "PIG",
+        (GRAVIDEZ == "Única") & PESO >= PESO_P10 & PESO <= PESO_P90 ~ "AIG",
+        (GRAVIDEZ == "Única") & PESO > PESO_P90 ~ "GIG"
+      ),
+      levels = c("PIG", "AIG", "GIG")
+    )
+  )
+dados_sinasc_2
 
 # Ao terminar a Tarefa 8 commit com a mensagem "script BDEM - SINASC - tarefas 1 a 8" e envie para o repositório Projeto_BDEM_2016
 
