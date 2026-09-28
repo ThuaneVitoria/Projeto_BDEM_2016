@@ -311,13 +311,27 @@ dados_sinasc_2 |> select('IDADEMAE', 'SEMAGESTAC', 'APGAR5', 'PESO') |> summary(
 
 # Ao terminar a Tarefa 4 commit com a mensagem "script BDEM - SINASC - tarefas 1 a 4" e envie para o repositório Projeto_BDEM_2016
 
-
 # Tarefa 5. Atribuir para cada variável de dados_sinasc_2 como sendo NA a categoria de "Não informado ou Ignorado", 
 # geralmente com código 9
 # Verifique o dicionário do SINASC para identificar qual o código das categorias de cada variável
 # KOTELCHUCK = 9 significa "Não informado"   TPROBSON = 11 significa "Não classificado por falta de informação"
 # Em variáveis quantitativas como IDADEMAE verificar se existem valores como 9999 para NA
 
+dados_sinasc_2 = dados_sinasc_2 |>
+  mutate(
+    ESTCIVMAE = na_if(ESTCIVMAE, 9),
+    GESTACAO   = na_if(GESTACAO, 9),
+    GRAVIDEZ   = na_if(GRAVIDEZ, 9),
+    PARTO      = na_if(PARTO, 9),
+    SEXO       = na_if(SEXO,0),
+    IDANOMAL = na_if(IDANOMAL,9),
+    ESCMAE2010 = na_if(ESCMAE2010,9),
+    TPAPRESENT = na_if(TPAPRESENT,9),
+    KOTELCHUCK = na_if(KOTELCHUCK,9),
+    TPROBSON = na_if(TPROBSON, 11),
+    LOCNASC    = na_if(LOCNASC, 9),
+    APGAR5 = na_if(APGAR5,99)
+  )
 
 # Ao terminar a Tarefa 5 commit com a mensagem "script BDEM - SINASC - tarefas 1 a 5" e envie para o repositório Projeto_BDEM_2016
 
