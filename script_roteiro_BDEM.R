@@ -364,7 +364,16 @@ dados_sidra_4 = read.csv2('população residente censo 2010 - por faixa etária 
 
 
 # Tarefa 2. Criar uma nova variável de nome CODUF com os códigos da UF nos bancos dados_sidra_1, dados_sidra_2, dados_sidra_4
+library(dplyr)
 
+dados_sidra_1 = dados_sidra_1 |>
+  mutate(CODUF = substr(trimws(as.character(CODMUNRES)), 1, 2))
+
+dados_sidra_2 = dados_sidra_2 |>
+  mutate(CODUF = substr(trimws(as.character(CODMUNRES)), 1, 2))
+
+dados_sidra_4 = dados_sidra_4 |>
+  mutate(CODUF = substr(trimws(as.character(CODMUNRES)), 1, 2))
 
 # Ao terminar a Tarefa 2 commit com a mensagem "script BDEM - SIDRA - tarefas 1 a 2" e envie para o repositório Projeto_BDEM_2016
 
