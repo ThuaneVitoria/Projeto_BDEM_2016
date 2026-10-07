@@ -339,9 +339,22 @@ write.csv2(SIM_MS, 'SIM_MS.csv')
 
 # Tarefa 1: Ler os bancos de dados abaixo listados com os respectivos nomes
 # dados_sidra_1 para população residente estimada - UF e municípios - 2016 - SIDRA - tabela_6579.csv
+
+dados_sidra_1 = read.csv2('população residente estimada - UF e municípios - 2016 - SIDRA - tabela_6579.csv', fileEncoding = 'latin1')
+
+
 # dados_sidra_2 para população residente censo 2010 - UF e municípios - total e por sexo - SIDRA - tabela_1552.csv
+
+dados_sidra_2 = read.csv2('população residente censo 2010 - UF e municípios - total e por sexo - SIDRA - tabela_1552.csv')
+
 # dados_sidra_3 para população residente censo 2010 - por faixa etária - UF - SIDRA - tabela_1552.csv
+
+dados_sidra_3 = read.csv2('população residente censo 2010 - por faixa etária - UF - SIDRA - tabela_1552.csv')
+
 # dados_sidra_4 para população residente censo 2010 - por faixa etária e sexo - municípios - SIDRA - tabela_1552.csv
+
+dados_sidra_4 = read.csv2('população residente censo 2010 - por faixa etária e sexo - municípios - SIDRA - tabela_1552.csv')
+
 # Atenção que agora os arquivos têm nomes e códigos (com 7 dígitos) dos municípios (e alguns UF)
 
 # Verificar se a leitura de todos os bancos foi feita corretamente e a estrutura dos dados
