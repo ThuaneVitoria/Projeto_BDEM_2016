@@ -637,9 +637,22 @@ write.csv2(SINASC_MS, file = 'SINASC_MS.csv', row.names = FALSE)
 
 # Tarefa 1: Ler os bancos de dados abaixo listados com os respectivos nomes
 # dados_sidra_1 para população residente estimada - UF e municípios - 2016 - SIDRA - tabela_6579.csv
+
+dados_sidra_1 = read.csv2('população residente estimada - UF e municípios - 2016 - SIDRA - tabela_6579.csv', fileEncoding = 'latin1')
+
+
 # dados_sidra_2 para população residente censo 2010 - UF e municípios - total e por sexo - SIDRA - tabela_1552.csv
+
+dados_sidra_2 = read.csv2('população residente censo 2010 - UF e municípios - total e por sexo - SIDRA - tabela_1552.csv')
+
 # dados_sidra_3 para população residente censo 2010 - por faixa etária - UF - SIDRA - tabela_1552.csv
+
+dados_sidra_3 = read.csv2('população residente censo 2010 - por faixa etária - UF - SIDRA - tabela_1552.csv')
+
 # dados_sidra_4 para população residente censo 2010 - por faixa etária e sexo - municípios - SIDRA - tabela_1552.csv
+
+dados_sidra_4 = read.csv2('população residente censo 2010 - por faixa etária e sexo - municípios - SIDRA - tabela_1552.csv')
+
 # Atenção que agora os arquivos têm nomes e códigos (com 7 dígitos) dos municípios (e alguns UF)
 
 # Verificar se a leitura de todos os bancos foi feita corretamente e a estrutura dos dados
@@ -649,7 +662,16 @@ write.csv2(SINASC_MS, file = 'SINASC_MS.csv', row.names = FALSE)
 
 
 # Tarefa 2. Criar uma nova variável de nome CODUF com os códigos da UF nos bancos dados_sidra_1, dados_sidra_2, dados_sidra_4
+library(dplyr)
 
+dados_sidra_1 = dados_sidra_1 |>
+  mutate(CODUF = substr(trimws(as.character(CODMUNRES)), 1, 2))
+
+dados_sidra_2 = dados_sidra_2 |>
+  mutate(CODUF = substr(trimws(as.character(CODMUNRES)), 1, 2))
+
+dados_sidra_4 = dados_sidra_4 |>
+  mutate(CODUF = substr(trimws(as.character(CODMUNRES)), 1, 2))
 
 # Ao terminar a Tarefa 2 commit com a mensagem "script BDEM - SIDRA - tarefas 1 a 2" e envie para o repositório Projeto_BDEM_2016
 
@@ -657,16 +679,76 @@ write.csv2(SINASC_MS, file = 'SINASC_MS.csv', row.names = FALSE)
 # Tarefa 3. Selecionar em dados_sidra_ 1 a dados_sidra_4 a UF de responsabilidade do aluno 
 # e chamar os bancos de dados, respectivamente por sidra_1, sidra_2, sidra_3 e sidra_4
 
+sidra_1 = dados_sidra_1 |>
+    filter(CODUF == "50")
+
+sidra_2 = dados_sidra_2 |>
+  filter(CODUF == "50")
+
+sidra_3 = dados_sidra_3 |>
+  filter(CODMUNRES == 50)
+
+sidra_4 = dados_sidra_4 |> 
+  filter(CODUF == "50")
 
 # Ao terminar a Tarefa 3 commit com a mensagem "script BDEM - SIDRA - tarefas 1 a 3" e envie para o repositório Projeto_BDEM_2016
 
 
 # Tarefa 4: Criar um banco de dados, de nome SIDRA_UF.csv (Exemplo: SIDRA_RJ.csv), contendo as variáveis listadas no arquivo “Variáveis - Projeto - Tarefa 4 - SIDRA.pdf”
+library(dplyr)
+
+sidra_aux = sidra_1 |> left_join(sidra_2,by = 'CODMUNRES')
+
+f_15  = c("0 a 4 anos", "5 a 9 anos", "10 a 14 anos")
+f_15_49 = c("15 a 19 anos", "20 a 24 anos", "25 a 29 anos", "30 a 34 anos", 
+             "35 a 39 anos", "40 a 44 anos", "45 a 49 anos")
+f_50 = c("50 a 54 anos", "55 a 59 anos", "60 a 64 anos", "65 a 69 anos", 
+             "70 a 74 anos", "75 a 79 anos", "80 a 89 anos", "90 a 99 anos", 
+             "100 anos ou mais")
+
+SIDRA_MS =  data.frame(
+  ANO = 2016,
+  NIVEL = 'MUNICIPIO',
+  CODMUNRES = sidra_1$CODMUNRES,
+  POPRE_T = sidra_aux$POPRE_T,
+  POPRC_T = sidra_aux$POPRC_T,
+  POPRC_M = sidra_aux$POPRC_M,
+  POPRC_F = sidra_aux$POPRC_F,
+  POPRC_15 = sapply(sidra_aux$CODMUNRES, function(x) sum(sidra_4$POP[sidra_4$CODMUNRES == x & sidra_4$F_IDADE %in% f_15], na.rm = TRUE)),
+  POPRC_15_49 = sapply(sidra_aux$CODMUNRES, function(x) sum(sidra_4$POP[substr(sidra_4$CODMUNRES, 1, 6) == substr(x, 1, 6) & sidra_4$F_IDADE %in% f_15_49], na.rm = TRUE)),
+  POPRC_50 = sapply(sidra_aux$CODMUNRES, function(x) sum(sidra_4$POP[substr(sidra_4$CODMUNRES, 1, 6) == substr(x, 1, 6) & sidra_4$F_IDADE %in% f_50], na.rm = TRUE)),
+  POPRC_F_15 = sapply(sidra_aux$CODMUNRES, function(x) sum(sidra_4$POPF[substr(sidra_4$CODMUNRES, 1, 6) == substr(x, 1, 6) & sidra_4$F_IDADE %in% f_15], na.rm = TRUE)),
+  POPRC_F_15_49 = sapply(sidra_aux$CODMUNRES, function(x) sum(sidra_4$POPF[substr(sidra_4$CODMUNRES, 1, 6) == substr(x, 1, 6) & sidra_4$F_IDADE %in% f_15_49], na.rm = TRUE)),
+  POPRC_F_50 =sapply(sidra_aux$CODMUNRES, function(x) sum(sidra_4$POPF[substr(sidra_4$CODMUNRES, 1, 6) == substr(x, 1, 6) & sidra_4$F_IDADE %in% f_50], na.rm = TRUE))
+)
+
+# Linha da UF
+linha_uf = data.frame(
+  ANO           = 2016,
+  NIVEL         = 'UF',
+  CODMUNRES     = '50',
+
+  POPRE_T       = sidra_aux$POPRE_T[1],
+  POPRC_T       = sidra_aux$POPRC_T[1],
+  POPRC_M       = sidra_aux$POPRC_M[1],
+  POPRC_F       = sidra_aux$POPRC_F[1],
+  
+  POPRC_15      = sum(sidra_3$POP[sidra_3$F_IDADE %in% f_15]),
+  POPRC_15_49   = sum(sidra_3$POP[sidra_3$F_IDADE %in% f_15_49]),
+  POPRC_50      = sum(sidra_3$POP[sidra_3$F_IDADE %in% f_50]),
+  POPRC_F_15    = sum(sidra_3$POPF[sidra_3$F_IDADE %in% f_15]),
+  POPRC_F_15_49 = sum(sidra_3$POPF[sidra_3$F_IDADE %in% f_15_49]),
+  POPRC_F_50    = sum(sidra_3$POPF[sidra_3$F_IDADE %in% f_50])
+)
+
+SIDRA_MS = rbind(linha_uf, SIDRA_MS[-1, ])
 
 # Ao terminar a Tarefa 4 commit com a mensagem "script BDEM - SIDRA - tarefas 1 a 4" e envie para o repositório Projeto_BDEM_2016
 
-
 # Tarefa 5:Exportar o banco de dados com o nome SIDRA_UF.csv (Exemplo: SIDRA_RJ.csv)
+
+write.csv2(SIDRA_MS, file = "SIDRA_MS.csv")
+
 # Ao terminar a Tarefa 5 commit com o comentário "dados SIDRA_UF 2016 e script - SIDRA - tarefas 1 a 5"  e envie para o repositório Projeto_BDEM_2016
 
 
