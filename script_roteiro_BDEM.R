@@ -760,11 +760,22 @@ write.csv2(SIDRA_MS, file = "SIDRA_MS.csv")
 
 # Tarefa 1: Ler os bancos de dados abaixo listados com os respectivos nomes
 # codigos_IBGE_2010 para códigos dos municípios - 2010.csv
+codigos_IBGE_2010 = read.csv2('códigos dos municípios - 2010.csv')
+
 # dados_atlas_1 para IDHM - 2010 (CENSO) e 2016 (PNAD) - total e por sexo - UF - Atlas Brasil.csv
+dados_atlas_1 = read.csv2('IDHM - 2010 (CENSO) e 2016 (PNAD) - total e por sexo - UF - Atlas Brasil.csv', encoding = 'latin1', dec = '.')
+
 # dados_atlas_2 para IDHM - 2010 - municípios - Atlas Brasil.csv
+dados_atlas_2 = read.csv2('IDHM - 2010 - municípios - Atlas Brasil.csv',dec = '.')
+
 # Atenção que agora alguns arquivos só têm os nomes dos municípios e das UFs, mas não têm os códigos
 
 # Verificar se a leitura de todos os bancos foi feita corretamente e a estrutura dos dados
+library(dplyr)
+
+glimpse(codigos_IBGE_2010)
+glimpse(dados_atlas_1)
+glimpse(dados_atlas_2)
 
 # Ao terminar a Tarefa 1 commit com a mensagem "script BDEM - ATLAS - tarefa 1" e envie para o repositório Projeto_BDEM_2016
 
