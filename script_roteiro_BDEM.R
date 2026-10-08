@@ -888,11 +888,12 @@ ATLAS_MS
 
 
 # Tarefa 3. Exportar o banco de dados com o nome ATLAS_UF.csv (Exemplo: ATLAS_RJ.csv)
+write.csv2(ATLAS_MS,'ATLAS_MS.csv')
+
 # Ao terminar a Tarefa 3 commit com o comentário "dados ATLAS_UF 2016 e script - ATLAS - tarefas 1 a 3"  e envie para o repositório Projeto_BDEM_2016
 
 
-
-####################################
+#################################### 
 # ETAPA 5: BANCOS DE DADOS DO SINISA
 ####################################
 # Você deve criar e estar na branch SINISA antes de inserir os comandos 
@@ -921,7 +922,6 @@ ATLAS_MS
 
 # Tarefa 4. Exportar o banco de dados com o nome SINISA_UF.csv (Exemplo: SINISA_RJ.csv)
 # Ao terminar a Tarefa 4 commit com o comentário "dados SINISA_UF 2016 e script - SINISA - tarefas 1 a 4"  e enviar para o repositório Projeto_BDEM_2016
-
 
 
 ################################
