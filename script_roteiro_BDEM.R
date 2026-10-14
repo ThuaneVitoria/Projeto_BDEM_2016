@@ -924,7 +924,13 @@ summary(dados_sinisa)
 
 # Tarefa 2. Reduzir dados_sinisa apenas para o estado que o aluno irá trabalhar (utilizar os dois primeiros dígitos de CODMUNRES), nomeando este novo banco de dados como dados_sinisa_1
 
+dados_sinisa_1 = dados_sinisa |> filter(CODMUNRES %/% 10000 == 50)
+glimpse(dados_sinisa_1)
+
+sum(dados_sinisa$Estado == 'MS')
+
 # Ao terminar a Tarefa 2 commit com a mensagem "script BDEM - SINISA - tarefas 1 a 2" e envie para o repositório Projeto_BDEM_2016
+
 
 
 # Tarefa 3. Criar um banco de dados, de nome SINISA_UF.csv (Exemplo: SINISA_RJ.csv), contendo as variáveis listadas no arquivo “Variáveis - Projeto - Tarefa 3 - SINISA.pdf”
