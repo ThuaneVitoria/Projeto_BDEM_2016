@@ -931,10 +931,14 @@ sum(dados_sinisa$Estado == 'MS')
 
 # Ao terminar a Tarefa 2 commit com a mensagem "script BDEM - SINISA - tarefas 1 a 2" e envie para o repositório Projeto_BDEM_2016
 
-
-
 # Tarefa 3. Criar um banco de dados, de nome SINISA_UF.csv (Exemplo: SINISA_RJ.csv), contendo as variáveis listadas no arquivo “Variáveis - Projeto - Tarefa 3 - SINISA.pdf”
 
+SINISA_MS = dados_sinisa_1 |> transmute( ANO = 2016,
+                                      NIVEL = 'MUNICIPIO',
+                                      CODMUNRES = CODMUNRES,
+                                      POPR_RA = POPR_RA,
+                                      POPR_RE = POPR_RE)
+  
 # Ao terminar a Tarefa 3 commit com a mensagem "script BDEM - SINISA - tarefas 1 a 3" e envie para o repositório Projeto_BDEM_2016
 
 
