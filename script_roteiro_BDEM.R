@@ -880,20 +880,19 @@ mutate(
   select(ANO, NIVEL, CODMUNRES, IDHM_A, IDHM_CA, IDHM_CA_M, IDHM_CA_F)
 
 # Criar banco final ATLAS_UF "juntando" os bancos linha_estado e ATLAS_MUNICIPIO
-ATLAS_MS = rbind(linha_estado, ATLAS_MUNICIPIO)
+ATLAS_MS = rbind(linha_estado, ATLAS_MUNICIPIO[-1, ])
 
 ATLAS_MS
 
-# Ao terminar a Tarefa 2 commit com a mensagem "script BDEM - ATLAS - tarefas 1 a 2" e envie para o repositório Projeto_BDEM_2016
+# Ao terminar a Tarefa 2 commit com a mensagem "sc" e envie para o repositório Projeto_BDEM_2016
 
 
 # Tarefa 3. Exportar o banco de dados com o nome ATLAS_UF.csv (Exemplo: ATLAS_RJ.csv)
-write.csv2(ATLAS_MS,'ATLAS_MS.csv')
-
 # Ao terminar a Tarefa 3 commit com o comentário "dados ATLAS_UF 2016 e script - ATLAS - tarefas 1 a 3"  e envie para o repositório Projeto_BDEM_2016
 
 
-#################################### 
+
+####################################
 # ETAPA 5: BANCOS DE DADOS DO SINISA
 ####################################
 # Você deve criar e estar na branch SINISA antes de inserir os comandos 
@@ -901,12 +900,25 @@ write.csv2(ATLAS_MS,'ATLAS_MS.csv')
 
 # Tarefa 1: Ler o bancos de dados abaixo listado com os respectivo nome
 # dados_sinisa para agua e esgoto - município - 2016.csv
-# Atenção que o arquivo tem códigos e nomes de municípios e muitos NAs. 
+
+dados_sinisa = read.csv2('agua e esgoto - município - 2016.csv', encoding = 'latin1', na.strings = c(''),
+                         check.names = FALSE)
+
+
+# Atenção que o arsummary(dados_sinisa)quivo tem códigos e nomes de municípios e muitos NAs. 
 # Repare que os valores estão com o milhar indicado por ponto, o que não deve acontecer para o R não entender como decimal
 
 # Verificar se a leitura de todos os bancos foi feita corretamente e a estrutura dos dados
-# Remover a pontuação de milhar e converter para formato numérico
+library(dplyr)
+glimpse(dados_sinisa)
 
+# Remover a pontuação de milhar e converter para formato numérico
+num_cols = c('POPR_RA','POPR_RE')
+
+dados_sinisa[num_cols] = lapply(dados_sinisa[num_cols], function(x) {
+  as.numeric(gsub(".", "", x, fixed = TRUE))})
+
+summary(dados_sinisa)
 # Ao terminar a Tarefa 1 commit com a mensagem "script BDEM - SINISA - tarefa 1" e envie para o repositório Projeto_BDEM_2016
 
 
@@ -922,6 +934,7 @@ write.csv2(ATLAS_MS,'ATLAS_MS.csv')
 
 # Tarefa 4. Exportar o banco de dados com o nome SINISA_UF.csv (Exemplo: SINISA_RJ.csv)
 # Ao terminar a Tarefa 4 commit com o comentário "dados SINISA_UF 2016 e script - SINISA - tarefas 1 a 4"  e enviar para o repositório Projeto_BDEM_2016
+
 
 
 ################################
