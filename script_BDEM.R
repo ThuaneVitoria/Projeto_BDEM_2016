@@ -1192,17 +1192,39 @@ glimpse(BDEM_MS)
 
 
 # Tarefa 2: Inserir os seguintes indicadores epidemiológicos (com apenas dias casas decimais) no BDEM_UF:
-# TFG: Taxa de fecundidade geral
-# TMG: Taxa de mortalidade geral
-# RMM: Razão de mortalidade materna
-# TMM: Taxa de mortalidade materna
-# TMM_P: Taxa de mortalidade materna em até 42 dias
-# TMN: Taxa de mortalidade neonatal
-# TMN_P: Taxa de mortalidade neonatal precoce
-# TMN_T: Taxa de mortalidade neonatal tardia
-# TMI: Taxa de mortalidade infantil
 
+# TFG: Taxa de fecundidade geral
+BDEM_UF$TFG = round((BDEM_UF$TN / BDEM_UF$POPRC_F_15_49) * 1000, 2)
+
+# TMG: Taxa de mortalidade geral
+BDEM_MS$TMG = round((BDEM_MS$TO / BDEM_MS$POPRE_T) * 1000, 2)
+
+# RMM: Razão de mortalidade materna
+BDEM_MS$RMM = round((BDEM_MS$TO_MT / BDEM_MS$TN) * 100000, 2)
+
+# TMM: Taxa de mortalidade materna
+BDEM_MS$TMM = round((BDEM_MS$TO_MT / BDEM_MS$POPRC_F_15_49) * 100000, 2)
+
+# TMM_P: Taxa de mortalidade materna em até 42 dias
+BDEM_MS$TMM_P = round((BDEM_MS$TO_MT_P / BDEM_MS$POPRC_F_15_49) * 100000, 2)
+
+# TMN: Taxa de mortalidade neonatal
+BDEM_MS$TMN = round((BDEM_MS$TO_NT / BDEM_MS$TN) * 1000, 2)
+
+# TMN_P: Taxa de mortalidade neonatal precoce
+BDEM_MS$TMN_P = round((BDEM_MS$TO_NT_P / BDEM_MS$TN) * 1000, 2)
+
+# TMN_T: Taxa de mortalidade neonatal tardia
+BDEM_MS$TMN_T = round((BDEM_MS$TO_NT_T / BDEM_MS$TN) * 1000, 2)
+
+# TMI: Taxa de mortalidade infantil
+BDEM_MS$TMI = round(((BDEM_MS$TO_NT + BDEM_MS$TO_PNT) / BDEM_MS$TN) * 1000, 2)
+
+BDEM_MS = BDEM_MS[order(BDEM_MS$CODMUNRES), ]
 # Conferir o banco BDEM_UF após inserção dos indicadores
+head(BDEM_MS)
+glimpse(BDEM_MS)
+dim(BDEM_MS)
 
 # Ao terminar a Tarefa 2 commit com a mensagem "script BDEM - BDEM - tarefas 1 a 2" e envie para o repositório Projeto_BDEM_2016
 
