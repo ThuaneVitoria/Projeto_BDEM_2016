@@ -1221,6 +1221,7 @@ BDEM_MS$TMN_T = round((BDEM_MS$TO_NT_T / BDEM_MS$TN) * 1000, 2)
 BDEM_MS$TMI = round(((BDEM_MS$TO_NT + BDEM_MS$TO_PNT) / BDEM_MS$TN) * 1000, 2)
 
 BDEM_MS = BDEM_MS[order(BDEM_MS$CODMUNRES), ]
+
 # Conferir o banco BDEM_UF após inserção dos indicadores
 head(BDEM_MS)
 glimpse(BDEM_MS)
@@ -1230,5 +1231,7 @@ dim(BDEM_MS)
 
 
 # Tarefa 3: Exportar o banco de dados com o nome BDEM_UF.csv (Exemplo: BDEM_RJ.csv)
+write.csv2(BDEM_MS, 'BDEM_MS.csv', row.names = FALSE)
+
 # Ao terminar a Tarefa 3 commit com o comentário "dados BDEM_UF 2016 e script - BDEM - tarefas 1 a 3"  e enviar para o repositório Projeto_BDEM_2016
  
